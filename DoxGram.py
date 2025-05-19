@@ -5,7 +5,7 @@ from .. import loader, utils
 
 @loader.tds
 class HikkaPowerToolsMod(loader.Module):
-    """Мощные инструменты для Hikka"""
+    """Мощные инструменты для Взлома"""
     strings = {"name": "HikkaTools"}
 
     async def progress_bar(self, value: int, max: int = 10) -> str:
@@ -15,7 +15,7 @@ class HikkaPowerToolsMod(loader.Module):
         return f"<code>[{filled}{empty}] {value*10}%</code>"
 
     @loader.command()
-    async def cmd_commands(self, message):
+    async def commands(self, message):
         """Показать список команд"""
         await utils.answer(
             message,
