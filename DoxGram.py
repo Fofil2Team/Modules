@@ -6,7 +6,7 @@ from .. import loader, utils
 @loader.tds
 class HikkaPowerToolsMod(loader.Module):
     """Мощные инструменты для Взлома"""
-    strings = {"name": "HikkaTools"}
+    strings = {"name": "HackTools"}
 
     async def progress_bar(self, value: int, max: int = 10) -> str:
         """Графический прогресс-бар"""
@@ -14,8 +14,8 @@ class HikkaPowerToolsMod(loader.Module):
         empty = "░" * (max - value)
         return f"<code>[{filled}{empty}] {value*10}%</code>"
 
-    @loader.command()
-    async def commands(self, message):
+    @loader.command(name="commands")
+    async def show_commands(self, message):
         """Показать список команд"""
         await utils.answer(
             message,
@@ -48,9 +48,8 @@ class HikkaPowerToolsMod(loader.Module):
                 f"🛠 <i>Завершено: {percent}%</i>"
             )
         
-        # Генерация реалистичных данных
         data = [
-            f"📌 <b>IP:</b> <code>185.{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}</code>",
+            f"📌 <b>IP:</b> <code>{random.randint(192,255)}.{random.randint(0,255)}.{random.randint(0,255)}.{random.randint(0,255)}</code>",
             f"🌍 <b>Локация:</b> <code>{random.choice(['Москва', 'Киев', 'Минск'])}</code>",
             f"📱 <b>Телефон:</b> <code>+79{random.randint(10,99)}{random.randint(100000,999999)}</code>",
             f"📧 <b>Почта:</b> <code>target{random.randint(1990,2010)}@{random.choice(['mail','gmail','yandex'])}.com</code>",
