@@ -14,9 +14,10 @@ class HikkaPowerToolsMod(loader.Module):
         empty = "░" * (max - value)
         return f"<code>[{filled}{empty}] {value*10}%</code>"
 
-    @loader.command(name="commands")
-    async def cmd(self, message):
-        """Показать список команд"""
+@loader.command(name="commands")
+async def cmd(self, message):
+    """Показать список команд"""
+
         await utils.answer(
             message,
             "🔧 <b>Доступные команды:</b>\n\n"
