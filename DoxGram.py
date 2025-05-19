@@ -1,151 +1,115 @@
 import asyncio
-from telethon import events
-from telethon.tl.types import Message
 import random
 from datetime import datetime
+from telethon import events
 
-class HikkaCommands:
-    def __init__(self, bot):
-        self.bot = bot
-        self.bot.add_event_handler(
-            self.on_commands,
-            events.NewMessage(pattern=r"^\.commands$")
-        )
-        self.bot.add_event_handler(
-            self.on_doxm,
-            events.NewMessage(pattern=r"^\.DoxM$")
-        )
-        self.bot.add_event_handler(
-            self.on_snos,
-            events.NewMessage(pattern=r"^\.Snos$")
-        )
-        self.bot.add_event_handler(
-            self.on_kartel,
-            events.NewMessage(pattern=r"^\.Kartel$")
+class HikkaMod:
+    strings = {"name": "HikkaCommands"}
+
+    async def progress_bar(self, progress: int, total: int = 10) -> str:
+        """Крутой прогресс-бар"""
+        bar = "⬛" * progress + "⬜" * (total - progress)
+        return f"<code>[{bar}] {progress * 10}%</code>"
+
+    async def cmd_commands(self, message):
+        """Показывает список команд"""
+        await utils.answer(
+            message,
+            "🔮 <b>Доступные команды:</b>\n\n"
+            "👁 <code>.DoxM</code> - Полный докс цели\n"
+            "💣 <code>.Snos</code> - Тотальный репорт-шторм\n"
+            "👥 <code>.Kartel</code> - Вызов мексиканского картеля (100k MXN)\n\n"
+            "⚠️ <i>Используйте осторожно!</i>"
         )
 
-    async def progress_bar(self, progress, total=10):
-        """Генерация стильного прогресс-бара"""
-        bar = "█" * progress + "░" * (total - progress)
-        return f"[{bar}] {progress * 10}%"
-
-    async def on_commands(self, event):
-        """Список команд без лишних символов"""
-        commands = [
-            "🔥 **Доступные команды Хикки:** 🔥",
-            "",
-            "🕵️‍♂️ Докс - .DoxM (полная информация о цели)",
-            "💣 Снос - .Snos (тотальный репорт-шторм)",
-            "👥 Мексиканский Картель - .Kartel (100,000 MXN за услуги)",
-            "",
-            "⚠️ Используйте с осторожностью!"
-        ]
-        await event.edit("\n".join(commands))
-
-    async def on_doxm(self, event):
-        """Мощный докс с максимальной детализацией"""
-        message = await event.edit("🕵️‍♂️ **Инициализация системы докса...**\n`Подключаюсь к глубинному DarkWeb...`")
+    async def cmd_doxm(self, message):
+        """Полный докс с детальной информацией"""
+        m = await utils.answer(message, "🕵️ <b>Начинаю докс...</b>")
         
         steps = [
-            "Анализ цифрового следа...",
-            "Взлом соцсетей...",
-            "Поиск утечек баз данных...",
-            "Сканирование IP-адреса...",
-            "Геолокация по метаданным...",
-            "Поиск компромата...",
-            "Финальная сборка досье..."
+            "Анализ цифрового следа",
+            "Взлом соцсетей",
+            "Поиск в базах данных",
+            "Трассировка IP",
+            "Геолокация",
+            "Сбор компромата"
         ]
-        
-        for i in range(1, 11):
-            await asyncio.sleep(0.4)
-            progress = await self.progress_bar(i)
-            current_step = steps[min(i-1, len(steps)-1)]
-            await message.edit(
-                f"🕵️‍♂️ **Процесс доксинга**\n"
-                f"{progress}\n"
-                f"`Этап: {current_step}`\n"
-                f"`Найдено {i * 12}% данных...`"
-            )
-        
-        # Генерация рандомных но реалистичных данных
-        ip = f"192.168.{random.randint(1,255)}.{random.randint(1,255)}"
-        isp = random.choice(["Ростелеком", "Beeline", "MTS", "Megafon", "Tele2"])
-        city = random.choice(["Москва", "Санкт-Петербург", "Казань", "Новосибирск", "Екатеринбург"])
-        coord = f"{random.uniform(55.0, 60.0):.4f}°N, {random.uniform(30.0, 40.0):.4f}°E"
-        mail = f"target{random.randint(1980,2005)}@{random.choice(['mail', 'gmail', 'yandex'])}.com"
-        phone = f"+7{random.randint(900,999)}{random.randint(1000000,9999999)}"
-        
-        await event.edit(
-            "🔍 **ДОСЬЕ УСПЕШНО СОБРАНО** ✅\n\n"
-            f"📌 **IP адрес:** `{ip}`\n"
-            f"🏢 **Провайдер:** `{isp}`\n"
-            f"🌍 **Локация:** `{city}` (координаты: {coord})\n"
-            f"📧 **Почта:** `{mail}`\n"
-            f"📞 **Телефон:** `{phone}`\n"
-            f"🖥 **OS:** `Windows {random.randint(7,11)}`\n"
-            f"⏱ **Последняя активность:** `{datetime.now().strftime('%H:%M %d.%m.%Y')}`\n\n"
-            "⚠️ Информация для образовательных целей!"
-        )
-
-    async def on_snos(self, event):
-        """Максимально агрессивный снос"""
-        message = await event.edit("💣 **Активация протокола 'СНОС'...**\n`Запускаю ботнет из 47 устройств...`")
         
         for i in range(1, 11):
             await asyncio.sleep(0.3)
-            progress = await self.progress_bar(i)
-            reports = random.randint(i * 5, i * 9)
-            await message.edit(
-                f"💥 **СНЕСИТЬ ЭТОТ АККАУНТ!**\n"
-                f"{progress}\n"
-                f"`Отправлено {reports} репортов...`\n"
-                f"`Задействовано {i * 7} ботов...`"
+            await utils.answer(
+                m,
+                f"🕵️ <b>Докс в процессе...</b>\n"
+                f"{await self.progress_bar(i)}\n"
+                f"<i>{steps[min(i-1, len(steps)-1)]}...</i>"
             )
         
-        await asyncio.sleep(1)
-        await event.edit(
-            "☠️ **ЦЕЛЬ УНИЧТОЖЕНА!** ☠️\n\n"
-            "`Статус:` **Аккаунт получил 83 репорта**\n"
-            "`Вероятность бана:` **98.7%**\n"
-            "`Время до удаления:` **12-48 часов**\n\n"
-            "⚰️ R.I.P. ⚰️"
+        # Генерация реалистичных данных
+        data = {
+            "IP": f"185.23.{random.randint(10,255)}.{random.randint(1,255)}",
+            "Провайдер": random.choice(["Ростелеком", "МТС", "Билайн"]),
+            "Локация": random.choice(["Москва", "СПб", "Казань"]),
+            "Координаты": f"{random.uniform(50,60):.4f}°N, {random.uniform(30,40):.4f}°E",
+            "Почта": f"target{random.randint(1990,2005)}@{random.choice(['mail','yandex'])}.ru",
+            "Телефон": f"+7{random.randint(900,999)}{random.randint(1000000,9999999)}",
+            "OS": f"Windows {random.randint(7,11)}"
+        }
+        
+        result = "🔍 <b>ДОСЬЕ СОБРАНО:</b>\n\n" + "\n".join(
+            f"<b>• {k}:</b> <code>{v}</code>" for k, v in data.items()
+        )
+        
+        await utils.answer(m, result + "\n\n⚠️ <i>Только для образовательных целей!</i>")
+
+    async def cmd_snos(self, message):
+        """Мощный репорт-шторм"""
+        m = await utils.answer(message, "💣 <b>Запускаю протокол 'СНОС'...</b>")
+        
+        for i in range(1, 11):
+            await asyncio.sleep(0.4)
+            await utils.answer(
+                m,
+                f"💥 <b>Снос аккаунта...</b>\n"
+                f"{await self.progress_bar(i)}\n"
+                f"<i>Отправлено {i*8} репортов...</i>"
+            )
+        
+        await utils.answer(
+            m,
+            "☠️ <b>ЦЕЛЬ УНИЧТОЖЕНА!</b>\n\n"
+            "<i>• 87 репортов отправлено\n"
+            "• Вероятность бана: 99%\n"
+            "• Время до удаления: 12-48ч</i>"
         )
 
-    async def on_kartel(self, event):
-        """Мексиканский картель с ценой"""
-        message = await event.edit("👥 **Вызов Мексиканского Картеля...**\n`Соединяюсь с El Jefe...`")
+    async def cmd_kartel(self, message):
+        """Вызов мексиканского картеля"""
+        m = await utils.answer(message, "👥 <b>Связываюсь с картелем...</b>")
         
-        cartel_members = [
+        members = [
             "Хуан (эксперт по похищениям)",
             "Карлос (оружейник)",
-            "Мигель (водитель-экстремал)",
-            "Эстебан (взрывчатка)",
-            "Родриго (киллер)",
-            "Пабло (хакер)"
+            "Мигель (водитель)",
+            "Эстебан (взрывчатка)"
         ]
         
         for i in range(1, 11):
             await asyncio.sleep(0.5)
-            progress = await self.progress_bar(i)
-            hired = cartel_members[:min(i, len(cartel_members))]
-            await message.edit(
-                f"💀 **Формирование бригады...**\n"
-                f"{progress}\n"
-                f"`Нанято специалистов: {len(hired)}`\n"
-                f"`Последний нанятый: {hired[-1] if hired else 'нет'}`"
+            await utils.answer(
+                m,
+                f"💀 <b>Формирую бригаду...</b>\n"
+                f"{await self.progress_bar(i)}\n"
+                f"<i>Нанято: {members[:min(i, len(members))]}</i>"
             )
         
-        await asyncio.sleep(1)
-        await event.edit(
-            "🔫 **МЕКСИКАНСКИЙ КАРТЕЛЬ ГОТОВ К РАБОТЕ!** 🔫\n\n"
-            "`Состав бригады:`\n"
-            "• Хуан - глава операции\n"
-            "• 5 профессиональных sicarios\n"
-            "• 2 хакера из Guadalajara\n\n"
-            "💰 **Стоимость услуги:** 100,000 MXN (~5,000 USD)\n"
-            "⏱ **Время выполнения:** 24-72 часа\n\n"
-            "☠️ _El que busca encuentra..._ ☠️"
+        await utils.answer(
+            m,
+            "🔫 <b>МЕКСИКАНСКИЙ КАРТЕЛЬ ГОТОВ!</b>\n\n"
+            "<i>• Стоимость: 100,000 MXN (~5,000 USD)\n"
+            "• Время: 24-72 часа\n"
+            "• Гарантия результата</i>\n\n"
+            "<code>El que busca encuentra...</code>"
         )
 
-def setup(bot):
-    bot.add_module(HikkaCommands(bot))
+async def setup(hikka):
+    hikka.add_module(HikkaMod)
